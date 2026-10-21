@@ -1,14 +1,26 @@
-import AddButton from './AddButton'
+import { useContext } from "react";
+import AddButton from "./AddButton";
+import { CartContext } from "../context/CartContext";
 
 function Panel() {
+  const { productsPanel, isLoadingPanelProducts } = useContext(CartContext);
+
   return (
-    <article className="product-card">
-      <h2>Notebook</h2>
-      <p>Lined pages, 80 sheets.</p>
-      <p>Price: $10</p>
-      <AddButton />
-    </article>
-  )
+    <>
+      {isLoadingPanelProducts ? (
+        <h1>Cargando Productos...</h1>
+      ) : (
+        productsPanel.map((product) => (
+          <article key={product.id} className="product-card">
+            <h2>{product.title}</h2>
+            <p>{product.description}</p>
+            <p>Price: ${product.price}</p>
+            <AddButton product={product} />
+          </article>
+        ))
+      )}
+    </>
+  );
 }
 
-export default Panel
+export default Panel;

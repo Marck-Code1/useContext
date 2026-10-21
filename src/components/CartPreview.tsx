@@ -1,6 +1,10 @@
-const cartItems = [{ id: 'notebook', name: 'Notebook', price: 10, quantity: 1 }]
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 function CartPreview() {
+  const { cartPreviewProducts, countProductsCart, removeProductFromCart } =
+    useContext(CartContext);
+
   return (
     <div className="cart-preview">
       <button type="button" className="cart-preview__button" aria-label="Cart">
@@ -18,11 +22,12 @@ function CartPreview() {
           <circle cx="20" cy="21" r="1" />
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
         </svg>
-        <span className="cart-preview__badge">{cartItems.length}</span>
+        <span className="cart-preview__badge">{countProductsCart}</span>
       </button>
       <div className="cart-preview__dropdown">
+        {cartPreviewProducts.length === 0 && <p>El carrito está vacío.</p>}
         <ul className="cart-preview__list">
-          {cartItems.map((item) => (
+          {cartPreviewProducts.map((item) => (
             <li key={item.id} className="cart-preview__item">
               <span className="cart-preview__name">{item.name}</span>
               <span className="cart-preview__quantity">×{item.quantity}</span>
@@ -31,6 +36,7 @@ function CartPreview() {
                 type="button"
                 className="button button--danger cart-preview__remove"
                 aria-label={`Remove 1 of ${item.quantity} ${item.name}`}
+                onClick={() => removeProductFromCart(item.id)}
               >
                 Remove 1
               </button>
@@ -39,7 +45,7 @@ function CartPreview() {
         </ul>
       </div>
     </div>
-  )
+  );
 }
 
-export default CartPreview
+export default CartPreview;
